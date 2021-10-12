@@ -21,9 +21,9 @@ class ContractData(pydantic.BaseModel):
 
 @bdbasicrouter.get("/getcontract/{id_contract}", response_model=ContractData)
 async def getContract(id_contract:str) -> ContractData:
-    if id_contract == 13000:
+    if id_contract == "13000":
         return ContractData(id_contract=id_contract,download_speed=100,upload_speed=50, found=True)
     else:
-        return ContractData(id_contract=id_contract, found=True)
+        return ContractData(id_contract=id_contract, found=False)
 
 
