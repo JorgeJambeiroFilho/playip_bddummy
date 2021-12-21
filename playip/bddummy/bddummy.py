@@ -19,12 +19,19 @@ class ContractData(pydantic.BaseModel):
     upload_speed:int = 0
     is_radio:bool = False
     found:bool = False
+    pack_name:str = "PackDefault"
+    user_name:str
+    onu_key:str
+    def __init__(self, *args, **kargs):
+        super().__init__(*args, **kargs)
+        self.onu_key = self.user_name
+
 
 @bdbasicrouter.get("/getcontract/{id_contract}", response_model=ContractData)
 async def getContract(id_contract:str) -> ContractData:
     if id_contract == "13000":
         return ContractData(id_contract=id_contract,download_speed=20,upload_speed=10, is_radio=True, found=True)
     else:
-        return ContractData(id_contract=id_contract, found=False)
+        return ContractData(id_contract=id_contract, found=False, user_name="ivone2.sr.ftth" )
 
 
