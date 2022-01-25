@@ -29,8 +29,8 @@ class ContractData(pydantic.BaseModel):
 async def getContract(id_contract:str) -> ContractData:
 
     #hak = "william1.am.ftth"
-    #hak = "ivone2.sr.ftth"
-    hak =  "gilvanete.sb.ftth"
+    hak = "ivone2.sr.ftth"
+    #hak =  "gilvanete.sb.ftth"
 
     if id_contract == "13000":
         return ContractData(id_contract=id_contract,download_speed=100,upload_speed=50, is_radio=False, is_ftth=True,
