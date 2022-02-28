@@ -7,39 +7,15 @@ from pydantic import Field
 import pydantic
 import fastapi
 
+from playipappcommons.infra.endereco import Endereco
+from playipappcommons.ispbd.ispbddata import Client, ContractData
 
 print("FASTAPI version ",fastapi.__version__)
 
 bdbasicrouter = APIRouter(prefix="/playipispbd/basic")
 
-class Endereco(pydantic.BaseModel):
-    logradouro: str
-    numero: str
-    complemento: str
-    cep: str
-    condominio: Optional[str]
-    cidade: str
 
 
-class ContractData(pydantic.BaseModel):
-    id_contract: str
-    found: bool = False
-    download_speed: Optional[int] = None
-    upload_speed: Optional[int] = None
-    is_radio: Optional[bool] = None
-    is_ftth: Optional[bool] = None
-    pack_name: Optional[str] = None
-    user_name: Optional[str] = None
-    home_access_key: Optional[str] = None
-    home_access_type: Optional[str] = None
-    endereco: Optional[Endereco] = None
-
-class Client(pydantic.BaseModel):
-    found: bool = False
-    id_client: Optional[str] = None
-    name: Optional[str] = None
-    alt_name: Optional[str] = None
-    cpfcnpj: Optional[str] = None
 
 @bdbasicrouter.get("/getclientfromcpfcnpj/{cpfcnpj}", response_model=Client)
 async def getClientFromCPFCNPJ(cpfcnpj:str) -> Client:
