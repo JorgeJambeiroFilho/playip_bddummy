@@ -1,3 +1,5 @@
 fastapi[all]==0.63.0
 uvicorn
 dynaconf
+motor
+numpy

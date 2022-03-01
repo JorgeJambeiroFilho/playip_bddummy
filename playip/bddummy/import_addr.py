@@ -1,15 +1,13 @@
-import asyncio
-import math
-import os
-from typing import List, Optional
+from typing import Optional
 
-import pydantic
 from dynaconf import settings
+from fastapi import APIRouter
 
-from playip.bddummy.bddummy import bdbasicrouter
 from playipappcommons.infra.endereco import Endereco
 from playipappcommons.infra.infraimportmethods import ImportAddressResult, importAddress
-from playipchatmongo import getBotMongoDB
+from playipappcommons.playipchatmongo import getBotMongoDB
+
+importrouter = APIRouter(prefix="/playipispbd/import")
 
 sq = """
     SELECT  
@@ -35,7 +33,7 @@ def cf(s):
 
 
 
-@bdbasicrouter.get("/importaddresses/{import_key}/{cidade_alvo}", response_model=ImportAddressResult)
+@importrouter.get("/importaddresses/{import_key}/{cidade_alvo}", response_model=ImportAddressResult)
 async def importAddresses(import_key: str, cidade_alvo: str) -> ImportAddressResult:
     mdb = getBotMongoDB()
     res: ImportAddressResult = ImportAddressResult()

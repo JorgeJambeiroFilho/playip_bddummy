@@ -1,0 +1,1 @@
+cp -r ../playipappcommon dependencies_copy
