@@ -1,7 +1,26 @@
 [development]
+USEDOCKER = false
+MONGO_DB_HOST="127.0.0.1"
+MONGO_DB_PORT=27017
+ADDRESSES_PATH="."
 
 [testing]
+USEDOCKER = true
+TEST = 0
+MONGO_DB_HOST="mongo"
+MONGO_DB_PORT=27017
+ADDRESSES_PATH="/etc"
 
 [prodtemp]
+USEDOCKER = true
+TEST = 0
+MONGO_DB_HOST="mongo"
+MONGO_DB_PORT=27017
+ADDRESSES_PATH="/etc"
 
 [production]
+USEDOCKER = true
+TEST = 0
+MONGO_DB_HOST="mongo"
+MONGO_DB_PORT=27017
+ADDRESSES_PATH="/etc"
