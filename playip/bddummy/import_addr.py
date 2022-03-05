@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional
 
 from dynaconf import settings
@@ -33,10 +34,11 @@ def cf(s):
 
 
 
-@importrouter.get("/importaddresses/{import_key}/{cidade_alvo}", response_model=ImportAddressResult)
-async def importAddresses(import_key: str, cidade_alvo: str) -> ImportAddressResult:
+@importrouter.get("/importaddresses", response_model=ImportAddressResult)
+async def importAddresses() -> ImportAddressResult:
     mdb = getBotMongoDB()
     res: ImportAddressResult = ImportAddressResult()
+    importExecUID: str = str(uuid.uuid1())
 
     with open(settings.ADDRESSES_PATH+"/enderecos.txt") as fp:
         p = 0
@@ -61,8 +63,8 @@ async def importAddresses(import_key: str, cidade_alvo: str) -> ImportAddressRes
 
                 endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf)
                 #print(endereco)
-                if cidade is not None and cidade.lower() == cidade_alvo.lower():
-                    await importAddress(mdb, res, import_key, endereco)
+                #if cidade is not None and cidade.lower() == cidade_alvo.lower():
+                await importAddress(mdb, res, importExecUID, endereco)
 
             lin = fp.readline()
             p += 1
