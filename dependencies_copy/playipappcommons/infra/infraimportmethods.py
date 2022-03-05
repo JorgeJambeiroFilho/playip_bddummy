@@ -168,7 +168,7 @@ async def importAddress(mdb, importResult: ImportAddressResult, importExecUID:st
     else:
         changed = False
         infraElement.importExecUID = importExecUID
-        infraElement.parentId = parent.id
+        infraElement.parentId = sparent.id
         found = False
         for cn in infraElement.addressLevelValues:
             found = found or cn == cname
