@@ -1,3 +1,5 @@
+import asyncio
+import time
 import uuid
 from typing import Optional
 
@@ -33,13 +35,31 @@ def cf(s):
     return r
 
 
+onGoingImportAddressResult: ImportAddressResult = None
 
 @importrouter.get("/importaddresses", response_model=ImportAddressResult)
 async def importAddresses() -> ImportAddressResult:
-    mdb = getBotMongoDB()
-    res: ImportAddressResult = ImportAddressResult()
-    importExecUID: str = str(uuid.uuid1())
+    global onGoingImportAddressResult
+    if onGoingImportAddressResult is None or onGoingImportAddressResult.complete:
+        onGoingImportAddressResult = ImportAddressResult()
+        asyncio.create_task(importAddressesIntern())
+    return onGoingImportAddressResult
 
+@importrouter.get("/getimportaddressesresult", response_model=ImportAddressResult)
+async def getImportAddressesResult() -> ImportAddressResult:
+    global onGoingImportAddressResult
+    if onGoingImportAddressResult is None:
+        onGoingImportAddressResult = ImportAddressResult()
+        onGoingImportAddressResult.complete = True
+    return onGoingImportAddressResult
+
+
+async def importAddressesIntern() -> ImportAddressResult:
+    mdb = getBotMongoDB()
+    global onGoingImportAddressResult
+    res: ImportAddressResult = onGoingImportAddressResult
+    importExecUID: str = str(uuid.uuid1())
+    time_ini = time.time()
     with open(settings.ADDRESSES_PATH+"/enderecos.txt") as fp:
         p = 0
         lin = fp.readline()
@@ -65,9 +85,13 @@ async def importAddresses() -> ImportAddressResult:
                 #print(endereco)
                 #if cidade is not None and cidade.lower() == cidade_alvo.lower():
                 await importAddress(mdb, res, importExecUID, endereco)
+                res.num_processed += 1
 
             lin = fp.readline()
             p += 1
+    time_end = time.time()
+    res.complete = True
+    print("Tempo de importação ", time_end - time_ini)
     print(res)
     return res
 
