@@ -7,7 +7,7 @@ from dynaconf import settings
 from fastapi import APIRouter
 
 from playipappcommons.infra.endereco import Endereco
-from playipappcommons.infra.infraimportmethods import ImportAddressResult, importAddress
+from playipappcommons.infra.infraimportmethods import ImportAddressResult, importOrFindAddress
 from playipappcommons.playipchatmongo import getBotMongoDB
 
 importrouter = APIRouter(prefix="/playipispbd/import")
@@ -84,7 +84,7 @@ async def importAddressesIntern() -> ImportAddressResult:
                 endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf)
                 #print(endereco)
                 #if cidade is not None and cidade.lower() == cidade_alvo.lower():
-                await importAddress(mdb, res, importExecUID, endereco)
+                await importOrFindAddress(mdb, res, importExecUID, endereco)
                 res.num_processed += 1
 
             lin = fp.readline()
