@@ -55,8 +55,12 @@ async def getImportAddressesResult() -> ImportAddressResult:
 
 
 async def importAddressesIntern() -> ImportAddressResult:
-    mdb = getBotMongoDB()
     global onGoingImportAddressResult
+    if onGoingImportAddressResult is None or onGoingImportAddressResult.complete:
+        onGoingImportAddressResult = ImportAddressResult()
+
+    mdb = getBotMongoDB()
+    #global onGoingImportAddressResult
     res: ImportAddressResult = onGoingImportAddressResult
     importExecUID: str = str(uuid.uuid1())
     time_ini = time.time()
