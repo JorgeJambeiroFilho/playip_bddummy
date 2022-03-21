@@ -63,7 +63,7 @@ async def getContratoPacoteServicoIterator():
             endereco: Endereco = Endereco\
             (
                     logradouro=row.logradouro, numero=row.num, complemento=row.complemento, bairro=row.bairro, cep=row.cep,
-                    condominio=row.condominio, cidade=row.cidade, uf=row.uf, medianetwork="allmedias"
+                    condominio=row.condominio, cidade=row.cidade, uf=row.id_uf, medianetwork="Mixed"
             )
             contract: ContractAnalyticData = ContractAnalyticData\
             (
@@ -78,7 +78,8 @@ async def getContratoPacoteServicoIterator():
                 DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
                 DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
                 DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,
-                TX_MOTIVO_CANCELAMENTO=row.SERVICO_TX_MOTIVO_CANCELAMENTO,
+                DT_CADASTRO=row.SERVICO_DT_CADASTRO,
+                TX_MOTIVO_CANCELAMENTO=row.SERVICO_TX_MOTIVO_CANCELAMENTO if row.SERVICO_TX_MOTIVO_CANCELAMENTO else "Desconhecido",
                 VL_SERVICO=row.VL_PACOTE, # só há um serviço, relevante,então posso jogar o preço do pacote todod nele para fins estatísticos
                 download_speed=row.VL_DOWNLOAD,
                 upload_speed=row.VL_UPLOAD,
