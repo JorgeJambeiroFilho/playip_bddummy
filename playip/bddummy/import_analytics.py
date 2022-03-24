@@ -74,7 +74,7 @@ async def getContratoPacoteServicoIterator():
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
             (
-                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO,
+                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO, #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
                 DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
                 DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
                 DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,
