@@ -41,6 +41,7 @@ async def getContratoPacoteServicoIterator():
         lin = fp.readline()
         lin = lin.strip()[1:-1]
         headers = [s.strip()[1:-1] for s in lin.split(",")]
+        num = 0
         lin = fp.readline()
         while lin:
             lin = lin.strip()[1:-1]
@@ -71,7 +72,7 @@ async def getContratoPacoteServicoIterator():
                 DT_ATIVACAO=row.CONTRATO_DT_ATIVACAO,
                 DT_CANCELAMENTO=row.CONTRATO_DT_CANCELAMENTO,
                 DT_INICIO=row.CONTRATO_DT_INICIO,
-                DT_FIM=row.CONTRATO_DT_INICIO,
+                DT_FIM=row.CONTRATO_DT_FIM,
                 endereco=endereco
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
@@ -89,6 +90,9 @@ async def getContratoPacoteServicoIterator():
             )
             spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service)
             yield spc
+            num += 1
+            if num > 115000:
+                return
             lin = fp.readline()
 
 
