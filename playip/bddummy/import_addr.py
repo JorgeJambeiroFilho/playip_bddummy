@@ -64,7 +64,11 @@ async def importAddressesIntern() -> ImportAddressResult:
     res: ImportAddressResult = onGoingImportAddressResult
     importExecUID: str = str(uuid.uuid1())
     time_ini = time.time()
-    with open(settings.ADDRESSES_PATH+"/enderecos.txt") as fp:
+    with open(settings.ADDRESSES_PATH+"/enderecos2.txt") as fp:
+        lin = fp.readline()
+        lin = lin.strip()[1:-1]
+        headers = [s.strip()[1:-1] for s in lin.split(",")]
+
         p = 0
         lin = fp.readline()
         while lin:
@@ -72,7 +76,7 @@ async def importAddressesIntern() -> ImportAddressResult:
             #print("|"+lin+"|")
 
             row = lin.split(",")
-            if len(row)==10:
+            if len(row) == 11:
                 #row = [s.strip().strip("'").strip() for s in row]
                 #print (row)
 
@@ -84,10 +88,14 @@ async def importAddressesIntern() -> ImportAddressResult:
                 condominio: Optional[str] = cf(row[4])
                 cidade: Optional[str] = cf(row[7])
                 uf: Optional[str] = cf(row[8])
+                is_radio = row[10] == "radio"  # a outra opção no wgc é "fibra"
+                medianetwork = "Rádio" if is_radio else "Cabo"
 
-                endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, medianetwork="Mixed")
-                #print(endereco)
-                #if cidade is not None and cidade.lower() == cidade_alvo.lower():
+                endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Infraestrutura-"+medianetwork)
+                await importOrFindAddress(mdb, res, importExecUID, endereco)
+                res.num_processed += 1
+
+                endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Comercial")
                 await importOrFindAddress(mdb, res, importExecUID, endereco)
                 res.num_processed += 1
 
