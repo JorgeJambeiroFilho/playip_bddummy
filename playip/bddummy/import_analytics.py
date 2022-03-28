@@ -56,7 +56,7 @@ async def getContratoPacoteServicoIterator():
                     v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
                     v = v.timestamp()
                 elif len(v) >= 2 and v[0]=="'" and v[-1]=="'":
-                    v = v[1:-1]
+                    v = v[1:-1].strip()
                 row.__setattr__(h,v)
 
             is_radio = row.NM_MEIO == "radio"  # a outra opção no wgc é "fibra"
