@@ -71,31 +71,31 @@ async def getContratoPacoteServicoIterator():
                     logradouro=row.logradouro, numero=row.num, complemento=row.complemento, bairro=row.bairro, cep=row.cep,
                     condominio=row.condominio, cidade=row.cidade, uf=row.id_uf, prefix="Comercial"
             )
-            for endereco in [enderecoInfra, enderecoComercial]:
-                contract: ContractAnalyticData = ContractAnalyticData\
-                (
-                    id_contract=row.ID_CONTRATO,
-                    DT_ATIVACAO=row.CONTRATO_DT_ATIVACAO,
-                    DT_CANCELAMENTO=row.CONTRATO_DT_CANCELAMENTO,
-                    DT_INICIO=row.CONTRATO_DT_INICIO,
-                    DT_FIM=row.CONTRATO_DT_FIM,
-                    endereco=endereco
-                )
-                service: ServicePackAnalyticData = ServicePackAnalyticData\
-                (
-                    fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO, #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
-                    DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
-                    DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
-                    DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,
-                    DT_CADASTRO=row.SERVICO_DT_CADASTRO,
-                    TX_MOTIVO_CANCELAMENTO=row.SERVICO_TX_MOTIVO_CANCELAMENTO if row.SERVICO_TX_MOTIVO_CANCELAMENTO else "Desconhecido",
-                    VL_SERVICO=row.VL_PACOTE, # só há um serviço, relevante,então posso jogar o preço do pacote todod nele para fins estatísticos
-                    download_speed=row.VL_DOWNLOAD,
-                    upload_speed=row.VL_UPLOAD,
-                    VL_PACOTE=row.VL_PACOTE
-                )
-                spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service)
-                yield spc
+            #for endereco in [enderecoInfra, enderecoComercial]:
+            contract: ContractAnalyticData = ContractAnalyticData\
+            (
+                id_contract=row.ID_CONTRATO, #+("_infra" if endereco is enderecoInfra else "_comercial"),
+                DT_ATIVACAO=row.CONTRATO_DT_ATIVACAO,
+                DT_CANCELAMENTO=row.CONTRATO_DT_CANCELAMENTO,
+                DT_INICIO=row.CONTRATO_DT_INICIO,
+                DT_FIM=row.CONTRATO_DT_FIM,
+                enderecos=[enderecoComercial] #enderecoInfra, só vou contar esses eventos na linha comercial, os eventos que interessam paar estrutura são outros.
+            )
+            service: ServicePackAnalyticData = ServicePackAnalyticData\
+            (
+                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO, #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
+                DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
+                DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
+                DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,
+                DT_CADASTRO=row.SERVICO_DT_CADASTRO,
+                TX_MOTIVO_CANCELAMENTO=row.SERVICO_TX_MOTIVO_CANCELAMENTO if row.SERVICO_TX_MOTIVO_CANCELAMENTO else "Desconhecido",
+                VL_SERVICO=row.VL_PACOTE, # só há um serviço, relevante,então posso jogar o preço do pacote todod nele para fins estatísticos
+                download_speed=row.VL_DOWNLOAD,
+                upload_speed=row.VL_UPLOAD,
+                VL_PACOTE=row.VL_PACOTE
+            )
+            spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service)
+            yield spc
 
 
             lin = fp.readline()
