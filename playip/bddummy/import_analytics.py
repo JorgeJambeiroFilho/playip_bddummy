@@ -62,9 +62,8 @@ async def getContratoPacoteServicoIterator():
                         dtlis = v.split("-") #[1:-1]
                         v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
                         v = v.timestamp()
-                    except:
-                        traceback.print_exc()
-
+                    except Exception as e:
+                        raise
                 #v = v.strip()
                 # if v == "None":
                 #     v = None
@@ -96,7 +95,7 @@ async def getContratoPacoteServicoIterator():
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
             (
-                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO.replace("/",""), #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
+                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO, #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
                 DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
                 DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
                 DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,
