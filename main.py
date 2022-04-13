@@ -12,11 +12,13 @@ from starlette.responses import HTMLResponse
 
 from playip.bddummy.bddummy import bdbasicrouter
 from playip.bddummy.import_addr import importrouter
+from playip.bddummy.import_analytics import importanalyticsrouter
 
 app = FastAPI()
 
 app.include_router(bdbasicrouter)
 app.include_router(importrouter)
+app.include_router(importanalyticsrouter)
 
 app.add_middleware(
     CORSMiddleware,

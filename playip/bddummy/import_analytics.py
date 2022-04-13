@@ -1,4 +1,5 @@
 import asyncio
+import traceback
 from datetime import datetime
 from typing import Iterable
 
@@ -56,10 +57,13 @@ async def getContratoPacoteServicoIterator():
             row = ObjRow()
             for h, v in zip(headers, lis):
                 v = cf(v)
-                if h.startswith("DT") or "_DT_" in h or h.endswith("_DT"):
-                    dtlis = v[1:-1].split("-")
-                    v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
-                    v = v.timestamp()
+                if v and (h.startswith("DT") or "_DT_" in h or h.endswith("_DT")):
+                    try:
+                        dtlis = v.split("-") #[1:-1]
+                        v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
+                        v = v.timestamp()
+                    except:
+                        traceback.print_exc()
 
                 #v = v.strip()
                 # if v == "None":
