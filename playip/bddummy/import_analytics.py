@@ -13,6 +13,13 @@ importanalyticsrouter = APIRouter(prefix="/playipispbd/importanalytics")
 
 onGoingImportAnalyticDataResult: ImportAnalyticDataResult = None
 
+def cf(s):
+    r = s.strip().strip("'").strip().replace("/","-")
+    if r == "None":
+        r = None
+    return r
+
+
 @importanalyticsrouter.get("/importanalytics", response_model=ImportAnalyticDataResult)
 async def importAnalytics() -> ImportAnalyticDataResult:
     global onGoingImportAnalyticDataResult
@@ -48,15 +55,17 @@ async def getContratoPacoteServicoIterator():
             lis = [s.strip() for s in lis]
             row = ObjRow()
             for h, v in zip(headers, lis):
-                v = v.strip()
-                if v == "None":
-                    v = None
-                elif h.startswith("DT") or "_DT_" in h or h.endswith("_DT"):
+                v = cf(v)
+                if h.startswith("DT") or "_DT_" in h or h.endswith("_DT"):
                     dtlis = v[1:-1].split("-")
                     v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
                     v = v.timestamp()
-                elif len(v) >= 2 and v[0]=="'" and v[-1]=="'":
-                    v = v[1:-1].strip()
+
+                #v = v.strip()
+                # if v == "None":
+                #     v = None
+                # elif len(v) >= 2 and v[0]=="'" and v[-1]=="'":
+                #     v = v[1:-1].strip()
                 row.__setattr__(h,v)
 
             is_radio = row.NM_MEIO == "radio"  # a outra opção no wgc é "fibra"
@@ -83,7 +92,7 @@ async def getContratoPacoteServicoIterator():
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
             (
-                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO, #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
+                fullName = row.NM_PROD + "/" + row.NM_MEIO + "/" + row.NM_TEC + "/" + row.NM_PACOTE_SERVICO.replace("/",""), #+ "/", # a última barra garante que todos os prefixos relevantes terminem em "/". Isso por sua vez evita problemas que apareceriam se um nome em um nível fosse prefixo de outro
                 DT_ATIVACAO=row.SERVICO_DT_ATIVACAO,
                 DT_DESATIVACAO=row.SERVICO_DT_DESATIVACAO,
                 DT_DESISTENCIA=row.SERVICO_DT_DESISTENCIA,

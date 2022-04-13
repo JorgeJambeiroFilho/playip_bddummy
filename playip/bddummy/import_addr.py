@@ -29,7 +29,7 @@ sq = """
                  """#.format(param_last_id_endereco_imported=last_id_endereco_imported))
 
 def cf(s):
-    r = s.strip().strip("'").strip()
+    r = s.strip().strip("'").strip().replace("/","-")
     if r == "None":
         r = None
     return r
