@@ -100,7 +100,8 @@ async def getContratoPacoteServicoTicketIterator():
                 NM_AREA_TICKET=row.ticketArea
             )
             spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service, ticket=ticket)
-            yield spc
+            if enderecoComercial.bairro == "Vila Santa Rita":
+                yield spc
 
 
             lin = fp.readline()
