@@ -1,10 +1,11 @@
 def compara_ativos():
 
+    ativosAppSt = {}
     ativosApp = set()
     ativosAddy = set()
 
 
-    fp = open("contratos_nao_cancelados.txt")
+    fp = open("contratos_nao_cancelados_2.txt")
     lin = fp.readline()
     while lin:
         #print(lin)
@@ -12,6 +13,7 @@ def compara_ativos():
         lis = lin.split(",")
         nc = int(lis[0])
         ativosApp.add(nc)
+        ativosAppSt[nc] = lin
         lin = fp.readline()
     fp.close()
 
@@ -35,7 +37,8 @@ def compara_ativos():
 
     lisAppNotAddy = list(setAppNotAddy)
     lisAppNotAddy.sort()
-    print(lisAppNotAddy)
+    for lin in [ativosAppSt[nc] for nc in lisAppNotAddy]:
+        print(lin)
 
 
 if __name__ == "__main__":

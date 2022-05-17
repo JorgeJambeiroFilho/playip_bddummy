@@ -78,6 +78,7 @@ async def getContratoPacoteServicoTicketIterator():
                 DT_CANCELAMENTO=row.CONTRATO_DT_CANCELAMENTO,
                 DT_INICIO=row.CONTRATO_DT_INICIO,
                 DT_FIM=row.CONTRATO_DT_FIM,
+                STATUS_CONTRATO=row.STATUS_CONTRATO,
                 enderecos=[enderecoComercial, enderecoInfra] #enderecoInfra, só vou contar esses eventos na linha comercial, os eventos que interessam paar estrutura são outros.
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
