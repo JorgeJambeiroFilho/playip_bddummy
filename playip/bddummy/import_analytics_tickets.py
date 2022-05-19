@@ -31,7 +31,7 @@ class ObjRow:
 async def getContratoPacoteServicoTicketIterator():
 
 
-    with open(settings.ANALYTICS_PATH+"/tickets.txt") as fp:
+    with open(settings.ANALYTICS_PATH+"/tickets2.txt") as fp:
         p = 0
         lin = fp.readline()
         lin = lin.strip()[1:-1]
@@ -101,8 +101,8 @@ async def getContratoPacoteServicoTicketIterator():
                 NM_AREA_TICKET=row.ticketArea
             )
             spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service, ticket=ticket)
-            if enderecoComercial.bairro == "Vila Santa Rita":
-                yield spc
+            #if enderecoComercial.bairro == "Vila Santa Rita":
+            yield spc
 
 
             lin = fp.readline()
