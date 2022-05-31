@@ -4,8 +4,9 @@ import uuid
 from typing import Optional
 
 from dynaconf import settings
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from playipappcommons.auth.oauth2FastAPI import infrapermissiondep
 from playipappcommons.infra.endereco import Endereco
 from playipappcommons.infra.infraimportmethods import ImportAddressResult, importOrFindAddress
 from playipappcommons.playipchatmongo import getBotMongoDB
@@ -38,7 +39,7 @@ def cf(s):
 onGoingImportAddressResult: ImportAddressResult = None
 
 @importrouter.get("/importaddresses", response_model=ImportAddressResult)
-async def importAddresses() -> ImportAddressResult:
+async def importAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
     global onGoingImportAddressResult
     if onGoingImportAddressResult is None or onGoingImportAddressResult.complete:
         onGoingImportAddressResult = ImportAddressResult()
@@ -46,7 +47,7 @@ async def importAddresses() -> ImportAddressResult:
     return onGoingImportAddressResult
 
 @importrouter.get("/getimportaddressesresult", response_model=ImportAddressResult)
-async def getImportAddressesResult() -> ImportAddressResult:
+async def getImportAddressesResult(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
     global onGoingImportAddressResult
     if onGoingImportAddressResult is None:
         onGoingImportAddressResult = ImportAddressResult()

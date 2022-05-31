@@ -1,12 +1,13 @@
 from typing import Optional
 from typing import List
 from dynaconf import settings
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from pydantic import Field
 
 import pydantic
 import fastapi
 
+from playipappcommons.auth.oauth2FastAPI import defaultpermissiondep
 from playipappcommons.infra.endereco import Endereco
 from playipappcommons.ispbd.ispbddata import Client, ContractData
 
@@ -18,12 +19,12 @@ bdbasicrouter = APIRouter(prefix="/playipispbd/basic")
 
 
 @bdbasicrouter.get("/getclientfromcpfcnpj/{cpfcnpj}", response_model=Client)
-async def getClientFromCPFCNPJ(cpfcnpj:str) -> Client:
+async def getClientFromCPFCNPJ(cpfcnpj:str, auth=Depends(defaultpermissiondep)) -> Client:
     if cpfcnpj=="07983764499":
         return Client(found=True, id_client="15594", name="Ivone", cpfcnpj=cpfcnpj)
 
 @bdbasicrouter.get("/getcontracts/{id_client}", response_model=List[ContractData])
-async def getContracts(id_client: str) -> List[ContractData]:
+async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> List[ContractData]:
     contract_list: List[str] = []
     if id_client == "15594":
         contract_list.append("13000")
@@ -34,7 +35,7 @@ async def getContracts(id_client: str) -> List[ContractData]:
     return contracts
 
 @bdbasicrouter.get("/getcontractsfromcpfcnpj/{cpfcnpj}", response_model=List[ContractData])
-async def getContractsFromCPFCNPJ(cpfcnpj: str) -> List[ContractData]:
+async def getContractsFromCPFCNPJ(cpfcnpj: str, auth=Depends(defaultpermissiondep)) -> List[ContractData]:
     client: Client = await getClientFromCPFCNPJ(cpfcnpj)
     if client:
         contracts: List[ContractData] = await getContracts(client.id_client)
@@ -44,7 +45,7 @@ async def getContractsFromCPFCNPJ(cpfcnpj: str) -> List[ContractData]:
 
 
 @bdbasicrouter.get("/getcontract/{id_contract}", response_model=ContractData)
-async def getContract(id_contract:str) -> ContractData:
+async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> ContractData:
 
     #hak = "william1.am.ftth"
     hak = "ivone2.sr.ftth"
