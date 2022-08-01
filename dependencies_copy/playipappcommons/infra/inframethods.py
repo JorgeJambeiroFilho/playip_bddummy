@@ -143,6 +143,8 @@ async def getInfraElementAddressHier(id:FAMongoId) -> List[FAMongoId]:
     lis.reverse()
     return lis
 
+
+
 async def getInfraElementStructuralHier(id:FAMongoId) -> List[FAMongoId]:
     mdb = getBotMongoDB()
     _id = id #ObjectId(id)
