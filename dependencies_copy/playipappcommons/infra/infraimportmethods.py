@@ -6,7 +6,7 @@ from bson import ObjectId
 from playipappcommons.famongo import FAMongoId
 from playipappcommons.infra.endereco import Endereco, increase_address_level, getFieldNameByLevel, buildFullImportName
 from playipappcommons.infra.inframethods import getChildren, createInfraElement, getInfraRoot, \
-    getInfraElementAddressHier, getInfraElement
+    getInfraElementAddressHier, getInfraElement, findApprox
 from playipappcommons.infra.inframodels import InfraElement, AddressQuery, AddressInFail
 from playipappcommons.playipchatmongo import getBotMongoDB
 from playipappcommons.util.levenshtein import levenshteinDistanceDP
