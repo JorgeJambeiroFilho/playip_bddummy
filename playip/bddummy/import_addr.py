@@ -41,7 +41,7 @@ def cf(s):
 
 
 async def getImportAddressResultIntern(mdb, begin:bool) -> ImportAddressResult:
-    return cast(await getControlStructure(mdb, iar_key, begin), ProcessAddressResult)
+    return cast(ProcessAddressResult, await getControlStructure(mdb, iar_key, begin))
 
 
 @importrouter.get("/importaddresses", response_model=ImportAddressResult)
@@ -60,16 +60,10 @@ async def getImportAddressesResult(auth=Depends(infrapermissiondep)) -> ImportAd
 
 async def importAddressesIntern(mdb, iar:ImportAddressResult):
     print("importAddressesIntern")
+    iar.clearCounts()
     importExecUID: str = str(uuid.uuid1())
     time_ini = time.time()
     with open(settings.ADDRESSES_PATH+"/enderecos3.txt") as fp:
-
-        iar2: ImportAddressResult = await getImportAddressResultIntern(mdb, False)
-        if iar2.isAborted():
-            iar.abort()
-            iar.done()
-            await iar.save(mdb)
-            return
 
         lin = fp.readline()
         print(lin)
@@ -79,7 +73,9 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
         p = 0
         lin = fp.readline()
         while lin:
-            print(lin)
+
+
+            #print(lin)
             lin = lin[1:-2]
             #print("|"+lin+"|")
 
@@ -111,10 +107,14 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
                 # await importOrFindAddress(mdb, res, importExecUID, endereco)
                 # res.num_processed += 1
 
+            if await iar.saveSoftly(mdb):
+                return
+
             lin = fp.readline()
             p += 1
     time_end = time.time()
-    iar.complete = True
+    iar.done()
+    await iar.saveHardly(mdb)
     print("Tempo de importação ", time_end - time_ini)
     print(iar)
 
@@ -123,22 +123,14 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
 async def stopImportAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
     mdb = getBotMongoDB()
     onGoingIar: ImportAddressResult = await getImportAddressResultIntern(mdb, False)
-    if onGoingIar.isGoingOn() or onGoingIar.isSuspended():
-        onGoingIar.abort()
-    mdb = getBotMongoDB()
-    await onGoingIar.save(mdb)
+    onGoingIar.abort()
+    await onGoingIar.saveSoftly(mdb)
     return onGoingIar
 
 
 @importrouter.get("/clearimportaddresses", response_model=ImportAddressResult)
 async def clearImportAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
     mdb = getBotMongoDB()
-    onGoingIar: ImportAddressResult = await getImportAddressResultIntern(mdb, False)
-    if onGoingIar.isGoingOn():
-        onGoingIar.message = "CannotClearRunningProcess"
-    else:
-        # faz começar do zero, mas esse processo sempre volta para o zero quando para, lago essa operação
-        # está aqui só para manter a analogia com outros semelhantes, mas que nem sempre recomeçam
-        onGoingIar = ImportAddressResult()
-        await onGoingIar.save(mdb)
+    onGoingIar = ImportAddressResult()
+    await onGoingIar.saveSoftly(mdb)
     return onGoingIar

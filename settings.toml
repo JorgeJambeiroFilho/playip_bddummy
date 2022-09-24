@@ -1,12 +1,15 @@
 [development]
 USEDOCKER = false
-MONGO_DB_HOST="@format {env[LOCALIP]}"
+#MONGO_DB_HOST="@format {env[LOCALIP]}"
 #MONGO_DB_HOST="192.168.12.19"
+MONGO_DB_HOST="127.0.0.1"
 MONGO_DB_PORT=27019
 ADDRESSES_PATH="."
 ANALYTICS_PATH="."
 NO_OAUTH = 1
 PLAYIPAPP_URL = "@format http://{env[LOCALIP]}:8009"
+TEST = 1
+
 
 [testing]
 USEDOCKER = true

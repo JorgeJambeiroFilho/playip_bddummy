@@ -34,4 +34,4 @@ print("ENV_FOR_DYNACONF " + settings.ENV_FOR_DYNACONF)
 #use na linha de comando
 #uvicorn main:app --reload
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8016)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
