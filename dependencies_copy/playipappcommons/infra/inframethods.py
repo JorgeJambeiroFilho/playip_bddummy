@@ -460,7 +460,7 @@ def findApprox(nome:str, subs: List[InfraElement], nivel: int):
     best:InfraElement = None
     best_pmatch = 0
     for sub in subs:
-        for fn in sub.addressLevelValues:
+        for fn in sub.addressLevelNames:
             n = fn.split("/")[-1]
             if useApprox:
                 pmatch = calc_pmatch(lnome, n.lower())
@@ -679,7 +679,7 @@ async def isApproxFieldWithProbWhenNeeded(nome:str, ie: InfraElement, nivel: int
     useApprox = fieldName == "logradouro" or fieldName == "bairro"
     lnome = nome.lower()
     best_pmatch = 0
-    for fn in ie.addressLevelValues:
+    for fn in ie.addressLevelNames:
         n = fn.split("/")[-1]
         if useApprox:
             pmatch =  await isApproxFieldProb(cache, nome, n.lower(), fieldName, threshold)
@@ -698,7 +698,7 @@ async def isApproxField(nome:str, ie: InfraElement, nivel: int, threshold:float=
     useApprox = fieldName == "logradouro" or fieldName == "bairro"
     lnome = nome.lower()
     best_pmatch = 0
-    for fn in ie.addressLevelValues:
+    for fn in ie.addressLevelNames:
         n = fn.split("/")[-1]
         if useApprox:
             pmatch = calc_pmatch(lnome, n.lower())

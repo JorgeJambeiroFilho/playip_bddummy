@@ -106,9 +106,12 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
                 # endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Comercial")
                 # await importOrFindAddress(mdb, res, importExecUID, endereco)
                 # res.num_processed += 1
+            else:
+                print("Linha falha: ",lin)
 
             if await iar.saveSoftly(mdb):
                 return
+
 
             lin = fp.readline()
             p += 1

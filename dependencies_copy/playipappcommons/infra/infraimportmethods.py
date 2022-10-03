@@ -225,7 +225,7 @@ async def importOrFindAddress(mdb, importResult: Optional[ProcessAddressResult],
 
     if not infraElement:
         infraElement:InfraElement = await createInfraElement(str(parent.id), str(sparent.id), cname)
-        infraElement.addressLevelValues.append(cname)
+        infraElement.addressLevelNames.append(cname)
         infraElement.addressLevel = nivel
         infraElement.addressFullNames.append(fullName)
         infraElement.importExecUID = importExecUID
@@ -241,11 +241,11 @@ async def importOrFindAddress(mdb, importResult: Optional[ProcessAddressResult],
         if not infraElement.manuallyMoved:
             infraElement.parentId = sparent.id
         found = False
-        for cn in infraElement.addressLevelValues:
+        for cn in infraElement.addressLevelNames:
             found = found or cn == cname
         changed = changed
         if not found:
-            infraElement.addressLevelValues.append(cname)
+            infraElement.addressLevelNames.append(cname)
             changed = True
 
         found = False
