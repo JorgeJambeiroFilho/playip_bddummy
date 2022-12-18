@@ -6,9 +6,9 @@ from typing import Iterable, cast
 from dynaconf import settings
 from fastapi import APIRouter
 
-from playipappcommons.analytics.analytics import ContractAnalyticData, ServicePackAnalyticData, \
+from playipappcommons.analytics.contractsanalytics import ContractAnalyticData, ServicePackAnalyticData, \
     ServicePackAndContractAnalyticData, import_contracts_raw, ImportAnalyticDataResult
-from playipappcommons.analytics.analyticsmodels import TicketData, iadr_key
+from playipappcommons.analytics.contractsanalyticsmodels import TicketData, iadr_key
 from playipappcommons.basictaskcontrolstructure import getControlStructure
 from playipappcommons.infra.endereco import Endereco
 

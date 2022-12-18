@@ -13,7 +13,6 @@ from playipappcommons.infra.infraimportmethods import ProcessAddressResult, impo
     addPrefixAndImportOrFindAddress, importAddressWithoutProcessing, ImportAddressResult, iar_key
 from playipappcommons.playipchatmongo import getBotMongoDB
 
-importrouter = APIRouter(prefix="/playipispbd/import")
 
 sq = """
     SELECT  
@@ -43,19 +42,6 @@ def cf(s):
 async def getImportAddressResultIntern(mdb, begin:bool) -> ImportAddressResult:
     return cast(ProcessAddressResult, await getControlStructure(mdb, iar_key, begin))
 
-
-@importrouter.get("/importaddresses", response_model=ImportAddressResult)
-async def importAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
-    mdb = getBotMongoDB()
-    onGoingImportAddressResult: ImportAddressResult = await getImportAddressResultIntern(mdb, True)
-    if onGoingImportAddressResult.hasJustStarted():
-        asyncio.create_task(importAddressesIntern(mdb, onGoingImportAddressResult))
-    return onGoingImportAddressResult
-
-@importrouter.get("/getimportaddressesresult", response_model=ProcessAddressResult)
-async def getImportAddressesResult(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
-    mdb = getBotMongoDB()
-    return await getImportAddressResultIntern(mdb, False)
 
 
 async def importAddressesIntern(mdb, iar:ImportAddressResult):
@@ -122,18 +108,3 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
     print(iar)
 
 
-@importrouter.get("/stopimportddresses", response_model=ImportAddressResult)
-async def stopImportAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
-    mdb = getBotMongoDB()
-    onGoingIar: ImportAddressResult = await getImportAddressResultIntern(mdb, False)
-    onGoingIar.abort()
-    await onGoingIar.saveSoftly(mdb)
-    return onGoingIar
-
-
-@importrouter.get("/clearimportaddresses", response_model=ImportAddressResult)
-async def clearImportAddresses(auth=Depends(infrapermissiondep)) -> ImportAddressResult:
-    mdb = getBotMongoDB()
-    onGoingIar = ImportAddressResult()
-    await onGoingIar.saveSoftly(mdb)
-    return onGoingIar
