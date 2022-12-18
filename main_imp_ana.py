@@ -1,8 +1,6 @@
 import asyncio
 import os
 
-from playip.bddummy.import_addr import importAddresses, importAddressesIntern
-from playip.bddummy.import_contracts import importAllContratoPacoteServico
 from playip.bddummy.import_contracts_tickets import importAllContratoPacoteServicoTicket
 
 if __name__ == "__main__":
