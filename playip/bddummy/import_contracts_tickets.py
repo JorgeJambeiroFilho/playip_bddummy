@@ -7,8 +7,9 @@ from dynaconf import settings
 from fastapi import APIRouter
 
 from playipappcommons.analytics.contractsanalytics import ContractAnalyticData, ServicePackAnalyticData, \
-    ServicePackAndContractAnalyticData, import_contracts_raw, ImportAnalyticDataResult
+    ServicePackAndContractAnalyticData, ImportAnalyticDataResult
 from playipappcommons.analytics.contractsanalyticsmodels import TicketData, iadr_key
+from playipappcommons.analytics.contractsimport import import_contracts_raw
 from playipappcommons.basictaskcontrolstructure import getControlStructure
 from playipappcommons.infra.endereco import Endereco
 

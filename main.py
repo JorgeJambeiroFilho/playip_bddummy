@@ -11,7 +11,7 @@ from starlette.requests import Request
 from starlette.responses import HTMLResponse
 
 from playip.bddummy.bddummy import bdbasicrouter
-from playip.bddummy.import_addr import importrouter
+from playip.bddummy.import_addr_router import importrouter
 from playip.bddummy.import_contracts_router import importanalyticsrouter
 
 app = FastAPI()

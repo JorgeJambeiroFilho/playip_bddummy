@@ -4,14 +4,11 @@ import uuid
 from typing import Optional, cast
 
 from dynaconf import settings
-from fastapi import APIRouter, Depends
 
-from playipappcommons.auth.oauth2FastAPI import infrapermissiondep
 from playipappcommons.basictaskcontrolstructure import getControlStructure
 from playipappcommons.infra.endereco import Endereco
-from playipappcommons.infra.infraimportmethods import ProcessAddressResult, importOrFindAddress, \
-    addPrefixAndImportOrFindAddress, importAddressWithoutProcessing, ImportAddressResult, iar_key
-from playipappcommons.playipchatmongo import getBotMongoDB
+from playipappcommons.infra.infraimportmethods import ProcessAddressResult, \
+     importAddressWithoutProcessing, ImportAddressResult, iar_key
 
 
 sq = """
