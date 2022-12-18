@@ -1,18 +1,21 @@
 import asyncio
 import traceback
 from datetime import datetime
-from typing import Iterable
+from typing import Iterable, cast
 
 from dynaconf import settings
 from fastapi import APIRouter
 
 from playipappcommons.analytics.analytics import ContractAnalyticData, ServicePackAnalyticData, \
-    ServicePackAndContractAnalyticData, count_events_contracts_raw, ImportAnalyticDataResult, \
-    getImportAnalyticDataResult, setImportAnalyticDataResult
+    ServicePackAndContractAnalyticData, import_contracts_raw, ImportAnalyticDataResult
+from playipappcommons.analytics.analyticsmodels import TicketData, iadr_key
+from playipappcommons.basictaskcontrolstructure import getControlStructure
 from playipappcommons.infra.endereco import Endereco
 
 
+
 #onGoingImportAnalyticDataResult: ImportAnalyticDataResult = None
+
 
 def cf(s):
     r = s.strip().strip("'").strip().replace("/","-")
@@ -25,10 +28,10 @@ def cf(s):
 class ObjRow:
     pass
 
-async def getContratoPacoteServicoIterator():
+async def getContratoPacoteServicoTicketIterator():
 
 
-    with open(settings.ANALYTICS_PATH+"/contrato_pacote_servico_list.txt") as fp:
+    with open(settings.ANALYTICS_PATH+"/tickets2.txt") as fp:
         p = 0
         lin = fp.readline()
         lin = lin.strip()[1:-1]
@@ -75,7 +78,8 @@ async def getContratoPacoteServicoIterator():
                 DT_CANCELAMENTO=row.CONTRATO_DT_CANCELAMENTO,
                 DT_INICIO=row.CONTRATO_DT_INICIO,
                 DT_FIM=row.CONTRATO_DT_FIM,
-                enderecos=[enderecoComercial] #enderecoInfra, só vou contar esses eventos na linha comercial, os eventos que interessam paar estrutura são outros.
+                STATUS_CONTRATO=row.STATUS_CONTRATO,
+                enderecos=[enderecoComercial, enderecoInfra] #enderecoInfra, só vou contar esses eventos na linha comercial, os eventos que interessam paar estrutura são outros.
             )
             service: ServicePackAnalyticData = ServicePackAnalyticData\
             (
@@ -90,17 +94,24 @@ async def getContratoPacoteServicoIterator():
                 upload_speed=row.VL_UPLOAD,
                 VL_PACOTE=row.VL_PACOTE
             )
-            spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service)
+            ticket: TicketData = TicketData\
+            (
+                DT_ABERTURA=row.DT_ticketAbertura,
+                DT_FECHAMENTO=row.DT_ticketFechamento,
+                NM_AREA_TICKET=row.ticketArea
+            )
+            spc: ServicePackAndContractAnalyticData = ServicePackAndContractAnalyticData(contract=contract, service=service, ticket=ticket)
+            #if enderecoComercial.bairro == "Vila Santa Rita":
             yield spc
+
+
             lin = fp.readline()
 
 
-async def importAllContratoPacoteServico():
-    onGoingImportAnalyticDataResult = await getImportAnalyticDataResult(True)
-    if onGoingImportAnalyticDataResult.started:
-        return
-    onGoingImportAnalyticDataResult.started = True
-    await setImportAnalyticDataResult(onGoingImportAnalyticDataResult)
+async def getImportContractsResultIntern(mdb, begin:bool) -> ImportAnalyticDataResult:
+    return cast(ImportAnalyticDataResult, await getControlStructure(mdb, iadr_key, begin))
 
-    it: Iterable[ServicePackAndContractAnalyticData] = getContratoPacoteServicoIterator()
-    await count_events_contracts_raw(it, onGoingImportAnalyticDataResult)
+
+async def importAllContratoPacoteServicoTicket(mdb, iadr:ImportAnalyticDataResult):
+    it: Iterable[ServicePackAndContractAnalyticData] = getContratoPacoteServicoTicketIterator()
+    await import_contracts_raw(it, iadr)

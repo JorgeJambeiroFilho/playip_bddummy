@@ -63,7 +63,7 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
     iar.clearCounts()
     importExecUID: str = str(uuid.uuid1())
     time_ini = time.time()
-    with open(settings.ADDRESSES_PATH+"/enderecos3.txt") as fp:
+    with open(settings.ADDRESSES_PATH+"/enderecos4.txt") as fp:
 
         lin = fp.readline()
         print(lin)
