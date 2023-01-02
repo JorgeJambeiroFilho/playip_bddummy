@@ -5,7 +5,7 @@ import asyncio
 from fastapi import APIRouter, Depends
 
 from playip.bddummy.import_contracts_tickets import importAllContratoPacoteServicoTicket, getImportContractsResultIntern
-from playipappcommons.analytics.contractsanalyticsmodels import ImportAnalyticDataResult, iadr_key, ProcessAnalyticDataResult
+from playipappcommons.analytics.contractsanalyticsmodels import ImportAnalyticDataResult, iadr_key, ProcessContractsResult
 from playipappcommons.auth.oauth2FastAPI import analyticspermissiondep
 from playipappcommons.playipchatmongo import getBotMongoDB
 
