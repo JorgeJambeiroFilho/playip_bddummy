@@ -1,6 +1,8 @@
 import asyncio
 import traceback
 from datetime import datetime
+from dateutil import tz
+from dateutil.tz import tzutc
 from typing import Iterable, cast
 
 from dynaconf import settings
@@ -29,6 +31,10 @@ def cf(s):
 class ObjRow:
     pass
 
+#tzsp = tz.timezone('America/Sao_Paulo')
+tzsp = tz.tzoffset('IST', -10800)
+
+
 async def getContratoPacoteServicoTicketIterator():
 
 
@@ -48,8 +54,10 @@ async def getContratoPacoteServicoTicketIterator():
                 if v and (h.startswith("DT") or "_DT_" in h or h.endswith("_DT")):
                     try:
                         dtlis = v.split("-") #[1:-1]
-                        v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]))
+                        v = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]), tzinfo=tzutc())
+                        vbr = datetime(year=int(dtlis[0]), month=int(dtlis[1]), day=int(dtlis[2]), tzinfo=tzsp)
                         v = v.timestamp()
+                        vbr = vbr.timestamp()
                     except Exception as e:
                         raise
                 #v = v.strip()
