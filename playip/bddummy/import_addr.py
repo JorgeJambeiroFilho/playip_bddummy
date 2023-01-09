@@ -37,7 +37,7 @@ def cf(s):
 
 
 async def getImportAddressResultIntern(mdb, begin:bool) -> ImportAddressResult:
-    return cast(ProcessAddressResult, await getControlStructure(mdb, iar_key, begin))
+    return cast(ImportAddressResult, await getControlStructure(mdb, iar_key, begin))
 
 
 
