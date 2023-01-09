@@ -9,7 +9,7 @@ from dynaconf import settings
 from fastapi import APIRouter
 
 from playipappcommons.analytics.contractsanalytics import ContractAnalyticData, ServicePackAnalyticData, \
-    ServicePackAndContractAnalyticData, ImportAnalyticDataResult
+    ServicePackAndContractAnalyticData, ImportContractsResult
 from playipappcommons.analytics.contractsanalyticsmodels import TicketData, iadr_key
 from playipappcommons.analytics.contractsimport import import_contracts_raw
 from playipappcommons.basictaskcontrolstructure import getControlStructure
@@ -117,10 +117,10 @@ async def getContratoPacoteServicoTicketIterator():
             lin = fp.readline()
 
 
-async def getImportContractsResultIntern(mdb, begin:bool) -> ImportAnalyticDataResult:
-    return cast(ImportAnalyticDataResult, await getControlStructure(mdb, iadr_key, begin))
+async def getImportContractsResultIntern(mdb, begin:bool) -> ImportContractsResult:
+    return cast(ImportContractsResult, await getControlStructure(mdb, iadr_key, begin))
 
 
-async def importAllContratoPacoteServicoTicket(mdb, iadr:ImportAnalyticDataResult):
+async def importAllContratoPacoteServicoTicket(mdb, iadr:ImportContractsResult):
     it: Iterable[ServicePackAndContractAnalyticData] = getContratoPacoteServicoTicketIterator()
     await import_contracts_raw(it, iadr)
