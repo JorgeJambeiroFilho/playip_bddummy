@@ -38,7 +38,7 @@ tzsp = tz.tzoffset('IST', -10800)
 async def getContratoPacoteServicoTicketIterator():
 
 
-    with open(settings.ANALYTICS_PATH+"/tickets3.txt") as fp:
+    with open(settings.ANALYTICS_PATH+"/tickets5.txt") as fp:
         p = 0
         lin = fp.readline()
         lin = lin.strip()[1:-1]
