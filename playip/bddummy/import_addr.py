@@ -90,7 +90,7 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
                 # await importOrFindAddress(mdb, res, importExecUID, endereco)
                 # res.num_processed += 1
             else:
-                print("Linha falha: ",lin)
+                print("Linha falha: ", lin)
 
             if await iar.saveSoftly(mdb):
                 return
@@ -100,7 +100,7 @@ async def importAddressesIntern(mdb, iar:ImportAddressResult):
             p += 1
     time_end = time.time()
     iar.done()
-    await iar.saveHardly(mdb)
+    await iar.saveSoftly(mdb)
     print("Tempo de importação ", time_end - time_ini)
     print(iar)
 
