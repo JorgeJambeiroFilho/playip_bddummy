@@ -43,65 +43,68 @@ async def getImportAddressResultIntern(mdb, begin:bool) -> ImportAddressResult:
 
 async def importAddressesIntern(mdb, iar:ImportAddressResult):
     print("importAddressesIntern")
-    iar.clearCounts()
-    importExecUID: str = str(uuid.uuid1())
-    time_ini = time.time()
-    with open(settings.ADDRESSES_PATH+"/enderecos4.txt") as fp:
-
-        lin = fp.readline()
-        print(lin)
-        lin = lin.strip()[1:-1]
-        headers = [s.strip()[1:-1] for s in lin.split(",")]
-
-        p = 0
-        lin = fp.readline()
-        while lin:
-
-
-            #print(lin)
-            lin = lin[1:-2]
-            #print("|"+lin+"|")
-
-            row = lin.split(",")
-            if len(row) == 11:
-                #row = [s.strip().strip("'").strip() for s in row]
-                #print (row)
-
-                logradouro: Optional[str] = cf(row[0])
-                numero: Optional[str] = cf(row[1])
-                complemento: Optional[str] = cf(row[2])
-                bairro: Optional[str] = cf(row[5])
-                cep: Optional[str] = cf(row[3])
-                condominio: Optional[str] = cf(row[4])
-                cidade: Optional[str] = cf(row[7])
-                uf: Optional[str] = cf(row[8])
-                is_radio = cf(row[10]) == "radio"  # a outra opção no wgc é "fibra"
-                medianetwork = "Rádio" if is_radio else "Cabo"
-                endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento,
-                                              bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf)
-
-                await importAddressWithoutProcessing(mdb, iar, importExecUID, endereco, medianetwork)
-
-                # endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Infraestrutura-"+medianetwork)
-                # await importOrFindAddress(mdb, res, importExecUID, endereco)
-                # res.num_processed += 1
-                #
-                # endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Comercial")
-                # await importOrFindAddress(mdb, res, importExecUID, endereco)
-                # res.num_processed += 1
-            else:
-                print("Linha falha: ", lin)
-
-            if await iar.saveSoftly(mdb):
-                return
-
+    try:
+        iar.clearCounts()
+        importExecUID: str = str(uuid.uuid1())
+        time_ini = time.time()
+        with open(settings.ADDRESSES_PATH+"/enderecos4.txt") as fp:
 
             lin = fp.readline()
-            p += 1
-    time_end = time.time()
-    iar.done()
-    await iar.saveSoftly(mdb)
-    print("Tempo de importação ", time_end - time_ini)
-    print(iar)
+            print(lin)
+            lin = lin.strip()[1:-1]
+            headers = [s.strip()[1:-1] for s in lin.split(",")]
+
+            p = 0
+            lin = fp.readline()
+            while lin:
+
+
+                #print(lin)
+                lin = lin[1:-2]
+                #print("|"+lin+"|")
+
+                row = lin.split(",")
+                if len(row) == 11:
+                    #row = [s.strip().strip("'").strip() for s in row]
+                    #print (row)
+
+                    logradouro: Optional[str] = cf(row[0])
+                    numero: Optional[str] = cf(row[1])
+                    complemento: Optional[str] = cf(row[2])
+                    bairro: Optional[str] = cf(row[5])
+                    cep: Optional[str] = cf(row[3])
+                    condominio: Optional[str] = cf(row[4])
+                    cidade: Optional[str] = cf(row[7])
+                    uf: Optional[str] = cf(row[8])
+                    is_radio = cf(row[10]) == "radio"  # a outra opção no wgc é "fibra"
+                    medianetwork = "Rádio" if is_radio else "Cabo"
+                    endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento,
+                                                  bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf)
+
+                    await importAddressWithoutProcessing(mdb, iar, importExecUID, endereco, medianetwork)
+
+                    # endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Infraestrutura-"+medianetwork)
+                    # await importOrFindAddress(mdb, res, importExecUID, endereco)
+                    # res.num_processed += 1
+                    #
+                    # endereco: Endereco = Endereco(logradouro=logradouro, numero=numero, complemento=complemento, bairro=bairro, cep=cep, condominio=condominio, cidade=cidade, uf=uf, prefix="Comercial")
+                    # await importOrFindAddress(mdb, res, importExecUID, endereco)
+                    # res.num_processed += 1
+                else:
+                    print("Linha falha: ", lin)
+
+                if await iar.saveSoftly(mdb):
+                    return
+
+
+                lin = fp.readline()
+                p += 1
+
+    finally:
+        time_end = time.time()
+        iar.done()
+        await iar.saveSoftly(mdb)
+        print("Tempo de importação ", time_end - time_ini)
+        print(iar)
 
 
