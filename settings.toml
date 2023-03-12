@@ -40,3 +40,14 @@ ADDRESSES_PATH="/etc"
 ANALYTICS_PATH="/etc"
 NO_OAUTH = 0
 PLAYIPAPP_URL = "http://apphub:8008"
+
+
+[testing_ngrok]
+USEDOCKER = true
+TEST = 0
+MONGO_DB_HOST="mongo"
+MONGO_DB_PORT=27017
+ADDRESSES_PATH="/etc"
+ANALYTICS_PATH="/etc"
+NO_OAUTH = 0
+PLAYIPAPP_URL = "http://apphub:8008"

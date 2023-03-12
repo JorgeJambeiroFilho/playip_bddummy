@@ -37,6 +37,7 @@ async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> Li
         contract_list.append("13000")
     if id_client == "7719":
         contract_list.append("19700")
+        contract_list.append("16937")
 
     contracts: List[ContractData] = []
     for c in contract_list:
@@ -62,7 +63,7 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     #hak = "william1.am.ftth"
     hak = "ivone2.sr.ftth"
     #hak =  "gilvanete.sb.ftth"
-    if id_contract == "19700":
+    if id_contract == "19700" or id_contract == "16937":
         print(19700)
         endereco: Endereco = Endereco(logradouro="Praça Alpha de Centauro (Centro de Apoio 2)", numero="20", complemento="sala7", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
         return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
