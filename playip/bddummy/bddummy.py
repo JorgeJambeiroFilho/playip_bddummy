@@ -28,6 +28,9 @@ async def getClientFromCPFCNPJ(cpfcnpj:str, auth=Depends(defaultpermissiondep)) 
         return Client(found=True, id_client="15594", name="Ivone", cpfcnpj=cpfcnpj)
     if cpfcnpj=="29875914894":
         return Client(found=True, id_client="7719", name="MTabian", cpfcnpj=cpfcnpj)
+    if cpfcnpj=="46470507859":
+        return Client(found=True, id_client="15141", name="Funcionario1", cpfcnpj=cpfcnpj)
+
 
 @bdbasicrouter.get("/getcontracts/{id_client}", response_model=List[ContractData])
 async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> List[ContractData]:
@@ -38,6 +41,9 @@ async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> Li
     if id_client == "7719":
         contract_list.append("19700")
         contract_list.append("16937")
+    if id_client == "15141":
+        contract_list.append("20499")
+
 
     contracts: List[ContractData] = []
     for c in contract_list:
@@ -74,6 +80,14 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     elif id_contract == "13000":
         print(13000)
         endereco: Endereco = Endereco(logradouro="Rua Etiopia", numero="33", complemento="", bairro="Jardim Santa Rita", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
+        return ContractData(found=True, id_contract=id_contract,download_speed=100,upload_speed=50, is_radio=False, is_ftth=True,
+                            home_access_key=hak, home_access_type="smartolt",
+                            pack_name="PackDefault", endereco=endereco, bloqueado=False,
+                            dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
+    elif id_contract == "20499":
+        print(20499)
+        # o cep está errado, mas não sei o certo. O bairro deve ser essa, mas não conferi.
+        endereco: Endereco = Endereco(logradouro="Rua Copenhague", numero="56", complemento="", bairro="Jardim Santa Rita - 2a Parte", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
         return ContractData(found=True, id_contract=id_contract,download_speed=100,upload_speed=50, is_radio=False, is_ftth=True,
                             home_access_key=hak, home_access_type="smartolt",
                             pack_name="PackDefault", endereco=endereco, bloqueado=False,
