@@ -87,7 +87,8 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     elif id_contract == "20499":
         print(20499)
         # o cep está errado, mas não sei o certo. O bairro deve ser essa, mas não conferi.
-        endereco: Endereco = Endereco(logradouro="Rua Copenhague", numero="56", complemento="", bairro="Jardim Santa Rita - 2a Parte", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
+        endereco: Endereco = Endereco(logradouro="Rua Bulgária", numero="1005", complemento="", bairro="Jardim Santa Rita", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
+        #endereco: Endereco = Endereco(logradouro="Rua Copenhague", numero="56", complemento="", bairro="Jardim Santa Rita - 2a Parte", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
         return ContractData(found=True, id_contract=id_contract,download_speed=100,upload_speed=50, is_radio=False, is_ftth=True,
                             home_access_key=hak, home_access_type="smartolt",
                             pack_name="PackDefault", endereco=endereco, bloqueado=False,
