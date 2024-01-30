@@ -69,14 +69,20 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     #hak = "william1.am.ftth"
     hak = "ivone2.sr.ftth"
     #hak =  "gilvanete.sb.ftth"
-    if id_contract == "19700" or id_contract == "16937":
+    if id_contract == "19700":
         print(19700)
         endereco: Endereco = Endereco(logradouro="Praça Alpha de Centauro (Centro de Apoio 2)", numero="20", complemento="sala7", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
         return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
                             home_access_key=hak, home_access_type="smartolt",
                             pack_name="PackDefault", endereco=endereco, bloqueado=False,
                             dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
-
+    if id_contract == "16937":
+        print(16937)
+        endereco: Endereco = Endereco(logradouro="Praça Alpha de Centauro (Centro de Apoio 2)", numero="20", complemento="sala1", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
+        return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
+                            home_access_key=hak, home_access_type="smartolt",
+                            pack_name="PackDefault", endereco=endereco, bloqueado=False,
+                            dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
     elif id_contract == "13000":
         print(13000)
         endereco: Endereco = Endereco(logradouro="Rua Etiopia", numero="33", complemento="", bairro="Jardim Santa Rita", cep="06660070", cidade="Itapevi", uf="SP", prefix=None)
