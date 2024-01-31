@@ -30,7 +30,10 @@ async def getClientFromCPFCNPJ(cpfcnpj:str, auth=Depends(defaultpermissiondep)) 
         return Client(found=True, id_client="7719", name="MTabian", cpfcnpj=cpfcnpj)
     if cpfcnpj=="46470507859":
         return Client(found=True, id_client="15141", name="Funcionario1", cpfcnpj=cpfcnpj)
-
+    if cpfcnpj=="46470507859":
+        return Client(found=True, id_client="15141", name="Cliente1", cpfcnpj=cpfcnpj)
+    if cpfcnpj=="39057622858":
+        return Client(found=True, id_client="18711", name="Cliente2", cpfcnpj=cpfcnpj)
 
 @bdbasicrouter.get("/getcontracts/{id_client}", response_model=List[ContractData])
 async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> List[ContractData]:
@@ -43,6 +46,8 @@ async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> Li
         contract_list.append("16937")
     if id_client == "15141":
         contract_list.append("20499")
+    if id_client == "18711":
+        contract_list.append("16712")
 
 
     contracts: List[ContractData] = []
@@ -69,6 +74,14 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     #hak = "william1.am.ftth"
     hak = "ivone2.sr.ftth"
     #hak =  "gilvanete.sb.ftth"
+    if id_contract == "16712":
+        print(16712)
+        endereco: Endereco = Endereco(logradouro="Rua anah", numero="20", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
+        return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
+                            home_access_key=hak, home_access_type="smartolt",
+                            pack_name="PackDefault", endereco=endereco, bloqueado=False,
+                            dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
+
     if id_contract == "19700":
         print(19700)
         endereco: Endereco = Endereco(logradouro="Praça Alpha de Centauro (Centro de Apoio 2)", numero="20", complemento="sala7", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
