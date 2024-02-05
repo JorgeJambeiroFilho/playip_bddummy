@@ -80,12 +80,13 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     #hak =  "gilvanete.sb.ftth"
 
     if id_contract == "30000":
-        print(16712)
-        endereco: Endereco = Endereco(logradouro="Rua Serra do Aracaí", numero="327", bairro="Jardim Rosemary", cep="06657630", cidade="Itapevi", uf="SP", prefix=None)
-        return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
-                            home_access_key=hak, home_access_type="smartolt",
-                            pack_name="PackDefault", endereco=endereco, bloqueado=False,
-                            dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
+        print(30000)
+        return ContractData(found=False, id_contract=id_contract)
+        # endereco: Endereco = None #Endereco(logradouro="Rua Serra do Aracaí", numero="327", bairro="Jardim Rosemary", cep="06657630", cidade="Itapevi", uf="SP", prefix=None)
+        # return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
+        #                     home_access_key=hak, home_access_type="smartolt",
+        #                     pack_name="PackDefault", endereco=endereco, bloqueado=False,
+        #                     dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
     if id_contract == "16712":
         print(16712)
         endereco: Endereco = Endereco(logradouro="Rua anah", numero="20", bairro="Alphaville", cep="06541075", cidade="Santana de Parnaíba", uf="SP", prefix=None)
