@@ -36,6 +36,8 @@ async def getClientFromCPFCNPJ(cpfcnpj:str, auth=Depends(defaultpermissiondep)) 
         return Client(found=True, id_client="18711", name="Cliente2", cpfcnpj=cpfcnpj)
     if cpfcnpj=="38462914809":
         return Client(found=True, id_client="19910", name="Cliente3", cpfcnpj=cpfcnpj)
+    if cpfcnpj=="13305105852":
+        return Client(found=True, id_client="6213", name="Cliente4", cpfcnpj=cpfcnpj)
 
 @bdbasicrouter.get("/getcontracts/{id_client}", response_model=List[ContractData])
 async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> List[ContractData]:
@@ -51,7 +53,9 @@ async def getContracts(id_client: str, auth=Depends(defaultpermissiondep)) -> Li
     if id_client == "18711":
         contract_list.append("16712")
     if id_client == "19910":
-        contract_list.append("30000")
+        contract_list.append("18137")
+    if id_client == "6213":
+        contract_list.append("3808")
 
 
     contracts: List[ContractData] = []
@@ -79,8 +83,16 @@ async def getContract(id_contract:str, auth=Depends(defaultpermissiondep)) -> Co
     hak = "ivone2.sr.ftth"
     #hak =  "gilvanete.sb.ftth"
 
-    if id_contract == "30000":
-        print(30000)
+    if id_contract == "3808":
+        print(3808)
+        endereco: Endereco = Endereco(logradouro="Rua Francisca de Nava Camargo", numero="389", bairro="Jardim Marina", cep="06660780", cidade="Itapevi", uf="SP", prefix=None, complemento="ANTIGA RUA CARUARU")
+        return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
+                            home_access_key=hak, home_access_type="smartolt",
+                            pack_name="PackDefault", endereco=endereco, bloqueado=False,
+                            dt_ativacao=datetime.datetime(year=2018, month=1, day=1).timestamp(), dt_cancelamento=None)
+
+    if id_contract == "18137":
+        print(18137)
         return ContractData(found=False, id_contract=id_contract)
         # endereco: Endereco = None #Endereco(logradouro="Rua Serra do Aracaí", numero="327", bairro="Jardim Rosemary", cep="06657630", cidade="Itapevi", uf="SP", prefix=None)
         # return ContractData(found=True, id_contract=id_contract,download_speed=250,upload_speed=125, is_radio=False, is_ftth=True,
